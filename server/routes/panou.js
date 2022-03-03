@@ -28,6 +28,6 @@ router.post("/signup", (request, response) => {
       response.json(err);
     });
 });
-
+router.get("/login");
 //module.exports = router;
 export default router;
