@@ -13,6 +13,7 @@ const signUpTemplate = new mongoose.Schema({
   email: {
     type: String,
     required: true,
+    unique: true,
   },
   password: {
     type: String,
@@ -21,7 +22,7 @@ const signUpTemplate = new mongoose.Schema({
   role: {
     type: String,
     required: true,
-    enum: ["Administrator", "Office Space Administrator", "Employee"],
+    enum: ["admin", "officeadmin", "employee"],
   },
   gender: {
     type: String,
