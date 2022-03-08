@@ -39,7 +39,7 @@ const signUpTemplate = new mongoose.Schema(
       required: false,
     },
   },
-  {collection: "user-data"}
+  {collection: "users"}
 );
 //module.exports = mong.model("mytable", signUpTemplate);
 export default mongoose.model("mytable", signUpTemplate);
