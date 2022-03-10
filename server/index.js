@@ -33,6 +33,7 @@ app.post("/api/register", async (req, res) => {
     res.json({status: "error", err: "duplicate email"});
   }
 });
+
 app.post("/api/login", async (req, res) => {
   const user = await User.findOne({
     email: req.body.email,

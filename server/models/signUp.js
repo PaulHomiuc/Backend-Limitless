@@ -38,6 +38,10 @@ const signUpTemplate = new mongoose.Schema(
       type: String,
       required: false,
     },
+    activated: {
+      type: Boolean,
+      default: true,
+    },
   },
   {collection: "users"}
 );
