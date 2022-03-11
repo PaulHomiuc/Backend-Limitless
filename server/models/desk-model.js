@@ -1,28 +1,32 @@
 import mongoose from "mongoose";
 
-const deskTemplate = new mongoose.Schema({
-  officeName: {
-    type: String,
-    required: true,
+const deskTemplate = new mongoose.Schema(
+  {
+    officeName: {
+      type: String,
+      required: true,
+    },
+    building: {
+      type: String,
+      required: true,
+    },
+    floorNumber: {
+      type: Number,
+      required: true,
+    },
+    totalDesks: {
+      type: Number,
+      required: true,
+    },
+    usableDesks: {
+      type: Number,
+      required: true,
+    },
+    officeadmin: {
+      type: String,
+      required: false,
+    },
   },
-  building: {
-    type: String,
-    required: true,
-  },
-  floorNumber: {
-    type: Number,
-    required: true,
-  },
-  totalDesks: {
-    type: Number,
-    required: true,
-  },
-  usableDesks: {
-    type: Number,
-    required: true,
-  },
-  officeadmin: {
-    type: String,
-    required: false,
-  },
-});
+  {collection: "offices"}
+);
+export default mongoose.model("mytable2", deskTemplate);

@@ -5,6 +5,7 @@ import cors from "cors";
 import postRoutes from "./routes/panou.js";
 import dotenv from "dotenv";
 import User from "./models/signUp.js";
+import Office from "./models/desk-model.js";
 import jwt, {decode} from "jsonwebtoken";
 dotenv.config();
 const app = express();
@@ -26,6 +27,23 @@ app.post("/api/register", async (req, res) => {
       gender: req.body.gender,
       birthDate: req.body.date,
       nationality: req.body.national,
+    });
+
+    res.json({status: "ok"});
+  } catch (err) {
+    res.json({status: "error", err: "duplicate email"});
+  }
+});
+app.post("/api/officemanage", async (req, res) => {
+  try {
+    console.log(req.body);
+    const office = await Office.create({
+      officeName: req.body.officename,
+      building: req.body.bname,
+      floorNumber: req.body.floornumber,
+      totalDesks: req.body.totaldesks,
+      usableDesks: req.body.usable,
+      officeadmin: req.body.offadm,
     });
 
     res.json({status: "ok"});
