@@ -48,10 +48,18 @@ app.post("/api/officemanage", async (req, res) => {
 
     res.json({status: "ok"});
   } catch (err) {
-    res.json({status: "error", err: "duplicate email"});
+    res.json({status: "error", err: "duplicate "});
   }
 });
-
+app.get("api/offices", async (req, res) => {
+  try {
+    const offices = await Office.find();
+    fs.writeFileSync("out_file.json", JSON.stringify(postMessages));
+    res.status(200).json(postMessages);
+  } catch (err) {
+    res.status(404).json({message: err.message});
+  }
+});
 app.post("/api/login", async (req, res) => {
   const user = await User.findOne({
     email: req.body.email,
