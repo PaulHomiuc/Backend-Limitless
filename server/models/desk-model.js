@@ -5,6 +5,7 @@ const deskTemplate = new mongoose.Schema(
     officeName: {
       type: String,
       required: true,
+      unique: true,
     },
     building: {
       type: String,

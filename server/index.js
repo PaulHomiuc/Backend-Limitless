@@ -1,4 +1,4 @@
-import express from "express";
+import express, {query} from "express";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import cors from "cors";
@@ -48,16 +48,19 @@ app.post("/api/officemanage", async (req, res) => {
 
     res.json({status: "ok"});
   } catch (err) {
-    res.json({status: "error", err: "duplicate "});
+    res.json({status: "error", err: "duplicate office"});
   }
 });
-app.get("api/offices", async (req, res) => {
+app.get("/api/offices", async (req, res) => {
   try {
     const offices = await Office.find();
-    fs.writeFileSync("out_file.json", JSON.stringify(postMessages));
-    res.status(200).json(postMessages);
+
+    res.status(200).json(offices);
+    // console.log(offices);
   } catch (err) {
     res.status(404).json({message: err.message});
+
+    console.log(err.message);
   }
 });
 app.post("/api/login", async (req, res) => {
