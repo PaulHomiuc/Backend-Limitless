@@ -7,7 +7,7 @@ import dotenv from "dotenv";
 import User from "./models/signUp.js";
 import Office from "./models/desk-model.js";
 import jwt, {decode} from "jsonwebtoken";
-import Building from "./models/buildings.js"
+import Building from "./models/buildings.js";
 dotenv.config();
 const app = express();
 app.use("/posts", postRoutes);
@@ -55,16 +55,15 @@ app.post("/api/officemanage", async (req, res) => {
 app.post("/api/building", async (req, res) => {
   try {
     console.log(req.body);
-    const office = await  Building.create({
+    const office = await Building.create({
       buildingName: req.body.buildingName,
       floorsCount: req.body.floornumber,
       adress: req.body.adress,
-     
     });
 
     res.json({status: "ok"});
   } catch (err) {
-    console.log(err.message)
+    console.log(err.message);
     res.json({status: "error", err: "duplicate building"});
   }
 });
@@ -142,7 +141,7 @@ app.post("/api/login", async (req, res) => {
 
 app.get("/users/:id", (req, res) => {
   const id = req.params.id;
-  console.log(req.body);
+
   try {
     User.findById(id, (err, user) => {
       res.json(user);
@@ -152,19 +151,37 @@ app.get("/users/:id", (req, res) => {
   }
 });
 app.post("/update/:id", (req, res) => {
-  const id = req.params.id;
+  const id = req.body.id;
+  console.log(req.body);
   User.findById(id, (err, user) => {
     if (!user) {
       res.status(404).send("Todo not found");
     } else {
+      console.log(req.body);
       user.lastName = req.body.lastName;
-
-      user
-        .save()
-        .then((user) => {
-          res.json(user);
-        })
-        .catch((err) => res.status(500).send(err.message));
+      user.firstName = req.body.firstName;
+      user.email = req.body.email;
+      user.password = req.body.password;
+      user.role = req.body.role;
+      user.gender = req.body.gender;
+      user.birthDate = req.body.birthDate;
+      user.nationality = req.body.nationality;
+      user.markModified("lastName");
+      user.markModified("firstName");
+      user.markModified("email");
+      user.markModified("password");
+      user.markModified("role");
+      user.markModified("gender");
+      user.markModified("birthDate");
+      user.markModified("nationality");
+      //user.save();
+      // user
+      //   .save()
+      //   .then((user) => {
+      //     console.log(user.firstName);
+      //     res.json(user);
+      //   })
+      //   .catch((err) => res.status(500).send(err.message));
     }
   });
 });
