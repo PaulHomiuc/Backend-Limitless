@@ -26,6 +26,7 @@ const deskTemplate = new mongoose.Schema(
     officeadmin: {
       type: String,
       required: false,
+      default:"none"
     },
   },
   {collection: "offices"}

@@ -68,6 +68,18 @@ app.post("/api/building", async (req, res) => {
     res.json({status: "error", err: "duplicate building"});
   }
 });
+app.get("/api/buildinget", async (req, res) => {
+  try {
+    const buildings = await Building.find();
+
+    res.status(200).json(buildings);
+    // console.log(offices);
+  } catch (err) {
+    res.status(404).json({message: err.message});
+
+    console.log(err.message);
+  }
+});
 app.get("/api/offices", async (req, res) => {
   try {
     const offices = await Office.find();
