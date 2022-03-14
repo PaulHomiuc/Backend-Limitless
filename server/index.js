@@ -151,21 +151,22 @@ app.get("/users/:id", (req, res) => {
   }
 });
 app.post("/update/:id", (req, res) => {
-  const id = req.body.id;
-  console.log(req.body);
+  const id = req.body.id.id;
+
   User.findById(id, (err, user) => {
     if (!user) {
+      console.log("eroare");
       res.status(404).send("Todo not found");
     } else {
-      console.log(req.body);
-      user.lastName = req.body.lastName;
-      user.firstName = req.body.firstName;
+      // console.log(req.body);
+      user.lastName = req.body.lname;
+      user.firstName = req.body.fname;
       user.email = req.body.email;
       user.password = req.body.password;
       user.role = req.body.role;
       user.gender = req.body.gender;
-      user.birthDate = req.body.birthDate;
-      user.nationality = req.body.nationality;
+      user.birthDate = req.body.date;
+      user.nationality = req.body.national;
       user.markModified("lastName");
       user.markModified("firstName");
       user.markModified("email");
@@ -174,14 +175,7 @@ app.post("/update/:id", (req, res) => {
       user.markModified("gender");
       user.markModified("birthDate");
       user.markModified("nationality");
-      //user.save();
-      // user
-      //   .save()
-      //   .then((user) => {
-      //     console.log(user.firstName);
-      //     res.json(user);
-      //   })
-      //   .catch((err) => res.status(500).send(err.message));
+      user.save();
     }
   });
 });
