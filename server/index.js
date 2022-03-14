@@ -7,7 +7,7 @@ import dotenv from "dotenv";
 import User from "./models/signUp.js";
 import Office from "./models/desk-model.js";
 import jwt, {decode} from "jsonwebtoken";
-
+import Building from "./models/buildings.js"
 dotenv.config();
 const app = express();
 app.use("/posts", postRoutes);
@@ -50,6 +50,22 @@ app.post("/api/officemanage", async (req, res) => {
     res.json({status: "ok"});
   } catch (err) {
     res.json({status: "error", err: "duplicate office"});
+  }
+});
+app.post("/api/building", async (req, res) => {
+  try {
+    console.log(req.body);
+    const office = await  Building.create({
+      buildingName: req.body.buildingName,
+      floorsCount: req.body.floornumber,
+      adress: req.body.adress,
+     
+    });
+
+    res.json({status: "ok"});
+  } catch (err) {
+    console.log(err.message)
+    res.json({status: "error", err: "duplicate building"});
   }
 });
 app.get("/api/offices", async (req, res) => {

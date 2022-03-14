@@ -42,6 +42,10 @@ const signUpTemplate = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    remotePercent:{
+      type:Number,
+      default:0
+    }
   },
   {collection: "users"}
 );
