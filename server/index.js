@@ -91,6 +91,7 @@ app.get("/api/offices", async (req, res) => {
     console.log(err.message);
   }
 });
+
 app.get("/api/users", async (req, res) => {
   try {
     const users = await User.find();
@@ -156,7 +157,7 @@ app.post("/update/:id", (req, res) => {
   User.findById(id, (err, user) => {
     if (!user) {
       console.log("eroare");
-      res.status(404).send("Todo not found");
+      res.status(404).send("User not found");
     } else {
       // console.log(req.body);
       user.lastName = req.body.lname;
@@ -176,6 +177,72 @@ app.post("/update/:id", (req, res) => {
       user.markModified("birthDate");
       user.markModified("nationality");
       user.save();
+    }
+  });
+});
+
+app.post("/deactivate/:id", (req, res) => {
+  const id = req.body.id.id;
+  User.findById(id, (err, user) => {
+    if (!user) {
+      console.log("eroare");
+      res.status(404).send("User not found");
+    } else {
+      // console.log(req.body);
+      user.activated = !user.activated;
+      user.markModified("activated");
+      user.save();
+    }
+  });
+});
+app.get("/getoffice/:id", async (req, res) => {
+  try {
+    const offices = await Office.findById(req.params.id);
+
+    res.status(200).json(offices);
+    // console.log(offices);
+  } catch (err) {
+    res.status(404).json({message: err.message});
+
+    console.log(err.message);
+  }
+});
+app.post("/deleteoffice/:id", (req, res) => {
+  const id = req.body.id.id;
+
+  Office.findByIdAndRemove(id, (err, office) => {
+    if (!office) {
+      console.log("eroare");
+      res.status(404).send("Office not found");
+    } else {
+      console.log("sters");
+      res.status(200).send("Office removed");
+    }
+  });
+});
+app.post("/updateoffice/:id", (req, res) => {
+  const id = req.body.id.id;
+
+  Office.findById(id, (err, office) => {
+    if (!office) {
+      console.log("eroare");
+      res.status(404).send("User not found");
+    } else {
+      // console.log(req.body);
+      office.officeName = req.body.officename;
+      office.building = req.body.building;
+      office.floorNumber = req.body.floorNumber;
+      office.totalDesks = req.body.totaldesks;
+      office.usableDesks = req.body.usabledesks;
+      office.officeadmin = req.body.officeadmin;
+
+      office.markModified("officeName");
+      office.markModified("building");
+      office.markModified("floorNumber");
+      office.markModified("totalDesks");
+      office.markModified("usableDesks");
+      office.markModified("officeadmin");
+      office.save();
     }
   });
 });
