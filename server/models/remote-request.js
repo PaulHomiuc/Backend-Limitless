@@ -23,7 +23,7 @@ const requestTemplate = new mongoose.Schema(
     },
     userId: {
       type: String,
-      required: false,
+      required: true,
     },
   },
   {collection: "requests"}

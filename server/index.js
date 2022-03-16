@@ -60,6 +60,7 @@ app.post("/api/request", async (req, res) => {
       sender: req.body.sender,
       reason: req.body.reason,
       percent: req.body.percent,
+      userId: req.body.id,
     });
 
     res.json({status: "ok"});
@@ -195,7 +196,28 @@ app.get("/users/:id", (req, res) => {
     console.log(err);
   }
 });
+app.post("/updatepercent/:id", (req, res) => {
+  console.log(req.body);
+  const id = req.body.id;
+  console.log("ceva");
+  try {
+    User.findById(id, (err, user) => {
+      if (!user) {
+        console.log("eroare");
+        res.status(404).send("User not found");
+      } else {
+        console.log(req.body);
+        user.remotePercent = req.body.percent;
 
+        user.markModified("remotePercent");
+
+        user.save();
+      }
+    });
+  } catch (error) {
+    console.log(error.message);
+  }
+});
 app.get("/requests/:id", async (req, res) => {
   const id = req.params.id;
 
@@ -235,28 +257,6 @@ app.post("/update/:id", (req, res) => {
       user.save();
     }
   });
-});
-app.post("/updatepercent/:id", (req, res) => {
-  console.log("ceva");
-  const id = req.body.id.id;
-  console.log("ceva");
-  try {
-    User.findById(id, (err, user) => {
-      if (!user) {
-        console.log("eroare");
-        res.status(404).send("User not found");
-      } else {
-        console.log(req.body);
-        user.remotePercent = req.body.percent;
-
-        user.markModified("remotePercent");
-
-        user.save();
-      }
-    });
-  } catch (error) {
-    console.log(error.message);
-  }
 });
 
 app.post("/deactivate/:id", (req, res) => {
@@ -300,7 +300,7 @@ app.post("/deleteoffice/:id", (req, res) => {
 });
 app.post("/deleterequest/:id", (req, res) => {
   const id = req.body.id.id;
-
+  console.log(id);
   Request.findByIdAndRemove(id, (err, request) => {
     if (!request) {
       console.log("eroare");
