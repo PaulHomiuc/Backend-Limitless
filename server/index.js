@@ -104,6 +104,22 @@ app.get("/api/users", async (req, res) => {
     console.log(err.message);
   }
 });
+app.get("/api/officeadmin", async (req, res) => {
+  try {
+    const admin = req.body;
+
+    console.log("caca");
+    const offices = await Office.findOne({officeadmin: admin});
+    console.log(offices);
+    res.status(200).json(offices);
+    // console.log(offices);
+  } catch (err) {
+    res.status(404).json({message: err.message});
+
+    console.log(err.message);
+  }
+});
+
 app.post("/api/delete", async (req, res) => {
   try {
     console.log(req.body);
