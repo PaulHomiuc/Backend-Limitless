@@ -8,6 +8,7 @@ import User from "./models/signUp.js";
 import Office from "./models/desk-model.js";
 import jwt, {decode} from "jsonwebtoken";
 import Building from "./models/buildings.js";
+import Request from "./models/remote-request.js";
 dotenv.config();
 const app = express();
 app.use("/posts", postRoutes);
@@ -52,6 +53,20 @@ app.post("/api/officemanage", async (req, res) => {
     res.json({status: "error", err: "duplicate office"});
   }
 });
+app.post("/api/request", async (req, res) => {
+  try {
+    console.log(req.body);
+    const request = await Request.create({
+      sender: req.body.sender,
+      reason: req.body.reason,
+      percent: req.body.percent,
+    });
+
+    res.json({status: "ok"});
+  } catch (err) {
+    res.json({status: "error", err: "duplicate office"});
+  }
+});
 app.post("/api/building", async (req, res) => {
   try {
     console.log(req.body);
@@ -84,6 +99,18 @@ app.get("/api/offices", async (req, res) => {
     const offices = await Office.find();
 
     res.status(200).json(offices);
+    // console.log(offices);
+  } catch (err) {
+    res.status(404).json({message: err.message});
+
+    console.log(err.message);
+  }
+});
+app.get("/api/getrequests", async (req, res) => {
+  try {
+    const requests = await Request.find();
+
+    res.status(200).json(requests);
     // console.log(offices);
   } catch (err) {
     res.status(404).json({message: err.message});
@@ -147,6 +174,7 @@ app.post("/api/login", async (req, res) => {
         lname: user.lname,
         email: user.email,
         role: user.role,
+        id: user._id,
       },
       "secret123"
     );
@@ -162,6 +190,18 @@ app.get("/users/:id", (req, res) => {
   try {
     User.findById(id, (err, user) => {
       res.json(user);
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.get("/requests/:id", async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    Request.findById(id, (err, request) => {
+      res.status(200).json(request);
     });
   } catch (err) {
     console.log(err);
@@ -196,6 +236,28 @@ app.post("/update/:id", (req, res) => {
     }
   });
 });
+app.post("/updatepercent/:id", (req, res) => {
+  console.log("ceva");
+  const id = req.body.id.id;
+  console.log("ceva");
+  try {
+    User.findById(id, (err, user) => {
+      if (!user) {
+        console.log("eroare");
+        res.status(404).send("User not found");
+      } else {
+        console.log(req.body);
+        user.remotePercent = req.body.percent;
+
+        user.markModified("remotePercent");
+
+        user.save();
+      }
+    });
+  } catch (error) {
+    console.log(error.message);
+  }
+});
 
 app.post("/deactivate/:id", (req, res) => {
   const id = req.body.id.id;
@@ -228,6 +290,19 @@ app.post("/deleteoffice/:id", (req, res) => {
 
   Office.findByIdAndRemove(id, (err, office) => {
     if (!office) {
+      console.log("eroare");
+      res.status(404).send("Office not found");
+    } else {
+      console.log("sters");
+      res.status(200).send("Office removed");
+    }
+  });
+});
+app.post("/deleterequest/:id", (req, res) => {
+  const id = req.body.id.id;
+
+  Request.findByIdAndRemove(id, (err, request) => {
+    if (!request) {
       console.log("eroare");
       res.status(404).send("Office not found");
     } else {
