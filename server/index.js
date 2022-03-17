@@ -196,7 +196,7 @@ app.get("/users/:id", (req, res) => {
     console.log(err);
   }
 });
-app.post("/updatepercent/:id", (req, res) => {
+app.post("/updatepercent", (req, res) => {
   console.log(req.body);
   const id = req.body.id;
   console.log("ceva");
